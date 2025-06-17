@@ -35,26 +35,44 @@ const Payment: React.FC = () => {
 
         const serviceIds = cart.map((item: any) => item.id);
 
-const orderData = {
-    username,
-    serviceIds,
-    availableDateId,      // <-- NAJWAŻNIEJSZA ZMIANA
-    paymentMethod,
-};
+        const orderData = {
+            username,
+            serviceIds,
+            availableDateId,
+            paymentMethod,
+        };
 
         try {
-            await apiRequest("/api/orders/create", {
+            // Tworzymy zamówienie
+            const response = await apiRequest("/api/orders/create", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(orderData),
             });
 
-            toast.success("Rezerwacja została dodana poprawnie!");
-            localStorage.removeItem("cart");
-            localStorage.removeItem("availableDateId");
-            setTimeout(() => navigate("/client/reservations"), 2000);
+            const orderId = response.id;
+
+            // Obsługa płatności gotówką
+            if (paymentMethod === "cash") {
+                toast.success("Rezerwacja została dodana poprawnie!");
+                localStorage.removeItem("cart");
+                localStorage.removeItem("availableDateId");
+                setTimeout(() => navigate("/client/reservations"), 2000);
+                return;
+            }
+
+            // Obsługa płatności PayU
+            const payUResponse = await fetch(`/api/payments/create?orderId=${orderId}`, { method: "POST" });
+            const payUData = await payUResponse.json();
+
+            if (!payUData["redirectUri"]) {
+                throw new Error("Brak redirectUri z PayU");
+            }
+
+            window.location.href = payUData["redirectUri"];
         } catch (error: any) {
-            if (error.message.includes("409")) {
+            console.error("Payment error:", error);
+            if (error.message?.includes("409")) {
                 toast.error("Wybrany termin jest już zajęty. Wybierz inny termin.");
             } else {
                 toast.error("Nie udało się przetworzyć płatności.");
@@ -68,11 +86,23 @@ const orderData = {
 
             <div className="mb-6 text-left">
                 <label className="flex items-center gap-3 mb-4">
-                    <input type="radio" value="online" checked={paymentMethod === "online"} onChange={() => setPaymentMethod("online")} className="w-5 h-5" />
+                    <input
+                        type="radio"
+                        value="online"
+                        checked={paymentMethod === "online"}
+                        onChange={() => setPaymentMethod("online")}
+                        className="w-5 h-5"
+                    />
                     <span className="text-lg">Płatność online (PayU)</span>
                 </label>
                 <label className="flex items-center gap-3">
-                    <input type="radio" value="cash" checked={paymentMethod === "cash"} onChange={() => setPaymentMethod("cash")} className="w-5 h-5" />
+                    <input
+                        type="radio"
+                        value="cash"
+                        checked={paymentMethod === "cash"}
+                        onChange={() => setPaymentMethod("cash")}
+                        className="w-5 h-5"
+                    />
                     <span className="text-lg">Płatność na miejscu</span>
                 </label>
             </div>
