@@ -1,41 +1,31 @@
-const API_URL = "http://localhost:8080/api/services";
+import { apiRequest } from "./apiService";
 
 const servicesService = {
     getServices: async () => {
-        try {
-            const token = localStorage.getItem("token");
+        return await apiRequest("/api/admin/services", { method: "GET" });
+    },
 
-            if (!token) {
-                console.error("❌ Brak tokena! Użytkownik może nie być zalogowany.");
-                throw new Error("Brak tokena. Zaloguj się ponownie.");
-            }
+    createService: async (serviceData: { name: string; price: number; description: string; available: boolean }) => {
+        return await apiRequest("/api/admin/services", {
+            method: "POST",
+            body: JSON.stringify(serviceData),
+            headers: { "Content-Type": "application/json" }
+        });
+    },
 
-            const response = await fetch(API_URL, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
-            });
+    deleteService: async (id: number) => {
+        return await apiRequest(`/api/admin/services/${id}`, {
+            method: "DELETE"
+        });
+    },
 
-            if (!response.ok) {
-                if (response.status === 401) {
-                    console.error("❌ Błąd 401: Nieautoryzowany dostęp.");
-                    throw new Error("Nieautoryzowany dostęp. Zaloguj się ponownie.");
-                } else if (response.status === 403) {
-                    console.error("❌ Błąd 403: Brak uprawnień.");
-                    throw new Error("Brak uprawnień do pobrania usług.");
-                } else {
-                    console.error(`❌ Błąd pobierania usług: ${response.status}`);
-                    throw new Error(`Błąd pobierania usług: ${response.status}`);
-                }
-            }
-
-            return await response.json();
-        } catch (error: any) {
-            console.error("❌ Błąd pobierania usług:", error.message);
-            throw new Error(error.message || "Wystąpił nieznany błąd.");
-        }
+    // TUTAJ DODAJEMY UPDATE:
+    updateService: async (id: number, serviceData: { name: string; price: number; description: string; available: boolean }) => {
+        return await apiRequest(`/api/admin/services/${id}`, {
+            method: "PUT",
+            body: JSON.stringify(serviceData),
+            headers: { "Content-Type": "application/json" }
+        });
     }
 };
 

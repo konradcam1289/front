@@ -1,34 +1,101 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import UserReservationsPage from "./components/UserReservationsPage";
+
+// UI Layout Components
+import Navbar from "./components/ui/Navbar";
+import Footer from "./components/ui/Footer";
+
+// Public Pages
 import Home from "./components/Home";
-import AdminPanel from "./components/AdminPanel";
-import WorkerPanel from "./components/WorkerPanel";
-import ClientPanel from "./components/ClientPanel";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Payment from "./components/Payment";
-import ServicesList from "./components/ServicesList"; // Importujemy listę usług
-import "./App.css"; // Importujemy globalne style
-import UserReservations from "./components/UserReservation";
+import ServicesList from "./components/ServicesList";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
+import OAuth2RedirectHandler from "./components/auth/OAuth2RedirectHandler";
+import About from "./components/public/About";
 
 
-function App() {
+// Client Pages
+import ClientPanel from "./components/client/ClientPanel";
+import UserReservations from "./components/client/UserReservation";
+import NewReservation from "./components/client/NewReservation";
+import SelectService from "./components/client/SelectService";
+import Payment from "./components/payment/Payment";
+
+// Worker Pages
+import WorkerPanel from "./components/worker/WorkerPanel";
+import WorkerStatusUpdate from "./components/worker/WrokerStatusUpdate";
+import WorkerManageAppointments from "./components/worker/WorkerManageAppointments";
+
+// Admin Pages
+import AdminPanel from "./components/admin/AdminPanel";
+import ManageUsers from "./components/admin/ManageUsers";
+import ManageServices from "./components/admin/ManageService";
+import ManageAppointments from "./components/admin/ManageAppointments";
+import AdminStats from "./components/admin/AdminStats";
+import Contact from "./components/public/Contact";
+
+
+
+// Toastify (popupy)
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import "./App.css";
+
+const App: React.FC = () => {
   return (
-    <div className="app-container">
-      <Router>
+    <div className="flex flex-col min-h-screen bg-white text-gray-900">
+      <Navbar />
+      <main className="flex-grow pt-24">
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Home />} />
-          <Route path="/admin/home" element={<AdminPanel />} />
-          <Route path="/worker/home" element={<WorkerPanel />} />
-          <Route path="/client/home" element={<ClientPanel />} />
+          <Route path="/services" element={<ServicesList />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/payment" element={<Payment />} />
-          <Route path="/services" element={<ServicesList />} /> {/* 🔹 Dodana trasa */}
+          <Route path="/oauth2/success" element={<OAuth2RedirectHandler />} />
+
+          {/* Client Routes */}
+          <Route path="/client/home" element={<ClientPanel />} />
           <Route path="/client/reservations" element={<UserReservations />} />
+          <Route path="/client/new-reservation" element={<NewReservation />} />
+          <Route path="/client/select-service" element={<SelectService />} />
+          <Route path="/payment" element={<Payment />} />
+
+          {/* Worker Routes */}
+          <Route path="/worker/home" element={<WorkerPanel />} />
+          <Route path="/worker/status-update" element={<WorkerStatusUpdate />} />
+          <Route path="/worker/manage-appointments" element={<WorkerManageAppointments />} />
+
+
+
+          {/* Admin Routes */}
+          <Route path="/admin/home" element={<AdminPanel />} />
+          <Route path="/admin/users" element={<ManageUsers />} />
+          <Route path="/admin/services" element={<ManageServices />} />
+          <Route path="/admin/appointments" element={<ManageAppointments />} />
+          <Route path="/admin/stats" element={<AdminStats />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/admin/users/:userId/reservations" element={<UserReservationsPage />} />
+
         </Routes>
-      </Router>
+      </main>
+
+      <Footer />
+
+      {/* Global Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+      />
     </div>
   );
-}
+};
 
 export default App;

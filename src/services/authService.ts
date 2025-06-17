@@ -1,7 +1,7 @@
-const API_URL = "http://localhost:8080/api/auth";
+const BASE_URL = "/api/auth";
 
 export const register = async (userData: any) => {
-    const response = await fetch(`${API_URL}/register`, {
+    const response = await fetch(`${BASE_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -15,7 +15,7 @@ export const register = async (userData: any) => {
 };
 
 export const login = async (username: string, password: string) => {
-    const response = await fetch(`${API_URL}/login`, {
+    const response = await fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -31,14 +31,16 @@ export const login = async (username: string, password: string) => {
     return data;
 };
 
-// 🔹 Nowa funkcja: obsługuje sukces logowania przez Google
 export const handleOAuth2Success = () => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
 
     if (token) {
         localStorage.setItem("token", token);
-        window.location.href = "/client/home"; // 🔹 Przekierowanie na stronę klienta
+        window.location.href = "/client/home";
+    } else {
+        console.error("❌ Brak tokena w URL po OAuth2!");
+        window.location.href = "/login";
     }
 };
 

@@ -1,39 +1,46 @@
-const API_URL = "http://localhost:8080/api/appointments/available";
+import { apiRequest } from "../services/apiService";
+import { formatDateForBackend } from "../utils/dateUtils";
+
+// Typ dostępnego terminu
+export interface AvailableDate {
+    id: number;
+    dateTime: string;
+    reserved: boolean;
+    username?: string;
+}
 
 const appointmentService = {
-    getAvailableDates: async () => {
-        const token = localStorage.getItem("token");
 
-        if (!token) {
-            console.error("❌ Brak tokena! Użytkownik może nie być zalogowany.");
-            throw new Error("Brak tokena.");
-        }
+    getAvailableDates: async (): Promise<AvailableDate[]> => {
+        return await apiRequest("/api/available-dates");
+    },
 
-        console.log("📌 Token wysyłany do backendu:", token);
+    addAvailableDate: async (datetime: Date): Promise<void> => {
+        const formatted = formatDateForBackend(datetime);
+        await apiRequest("/api/available-dates/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ dateTime: formatted })
+        });
+    },
 
-        try {
-            const response = await fetch(API_URL, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
-            });
+    deleteAvailableDate: async (id: number): Promise<void> => {
+        await apiRequest(`/api/available-dates/${id}`, {
+            method: "DELETE"
+        });
+    },
 
-            if (!response.ok) {
-                console.error(`❌ Błąd pobierania terminów: ${response.status}`);
-                const errorMessage = await response.text();
-                console.error("📌 Odpowiedź serwera:", errorMessage);
-                throw new Error(`Błąd pobierania terminów: ${response.status} - ${errorMessage}`);
-            }
-
-            const data = await response.json();
-            console.log("📌 Terminy pobrane z backendu:", data);
-            return data;
-        } catch (error) {
-            console.error("❌ Wystąpił błąd podczas pobierania terminów:", error);
-            throw error;
-        }
+    createReservation: async (reservationData: {
+        username: string;
+        serviceIds: number[];
+        appointmentDate: string;
+        paymentMethod: string;
+    }): Promise<void> => {
+        await apiRequest("/api/orders/create", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(reservationData)
+        });
     }
 };
 

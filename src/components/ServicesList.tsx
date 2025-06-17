@@ -16,11 +16,9 @@ const ServicesList: React.FC = () => {
                     setError("Brak dostępnych usług.");
                     setServices([]);
                 } else {
-                    console.log("📌 Usługi pobrane z backendu:", data);
                     setServices(data);
                 }
-            } catch (err) {
-                console.error("❌ Błąd pobierania usług:", err);
+            } catch {
                 setError("Nie udało się pobrać usług. Spróbuj ponownie później.");
             } finally {
                 setLoading(false);
@@ -31,61 +29,29 @@ const ServicesList: React.FC = () => {
     }, []);
 
     return (
-        <div style={containerStyle}>
-            <h2>🔧 Lista usług</h2>
+        <div className="max-w-4xl mx-auto py-12 px-6">
+            <h2 className="text-3xl font-bold text-center text-blue-700 mb-10">Lista usług</h2>
 
-            {loading && <p style={loadingStyle}>⏳ Ładowanie usług...</p>}
-            {error && <p style={errorStyle}>{error}</p>}
+            {loading && <p className="text-lg text-blue-600 text-center">Ładowanie usług...</p>}
+            {error && <p className="text-lg text-red-500 text-center">{error}</p>}
 
             {!loading && !error && services.length > 0 && (
-                <ul style={listStyle}>
+                <div className="grid gap-6 md:grid-cols-2">
                     {services.map(service => (
-                        <li key={service.id} style={listItemStyle}>
-                            <h3>{service.name}</h3>
-                            <p>{service.description}</p>
-                            <p><strong>Cena: {service.price} zł</strong></p>
-                        </li>
+                        <div key={service.id} className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+                            <h3 className="text-xl font-semibold text-blue-700 mb-2">{service.name}</h3>
+                            <p className="text-gray-700 mb-4">{service.description}</p>
+                            <p className="text-lg font-bold text-orange-500">Cena: {service.price} zł</p>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
 
-            {!loading && !error && services.length === 0 && <p>⚠ Brak dostępnych usług.</p>}
+            {!loading && !error && services.length === 0 && (
+                <p className="text-center text-gray-500">Brak dostępnych usług.</p>
+            )}
         </div>
     );
-};
-
-const containerStyle: React.CSSProperties = {
-    maxWidth: "600px",
-    margin: "0 auto",
-    textAlign: "center",
-    padding: "20px",
-    backgroundColor: "#fff",
-    borderRadius: "8px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-};
-
-const listStyle: React.CSSProperties = {
-    listStyleType: "none",
-    padding: 0,
-};
-
-const listItemStyle: React.CSSProperties = {
-    border: "1px solid #ddd",
-    padding: "10px",
-    marginBottom: "10px",
-    borderRadius: "5px",
-    textAlign: "left",
-    backgroundColor: "#f9f9f9",
-};
-
-const loadingStyle: React.CSSProperties = {
-    fontSize: "18px",
-    color: "#007BFF",
-};
-
-const errorStyle: React.CSSProperties = {
-    fontSize: "16px",
-    color: "red",
 };
 
 export default ServicesList;

@@ -1,14 +1,24 @@
-// import axios from "axios";
+import { apiRequest } from "./apiService";
 
-// const API_URL = "http://localhost:8080/api/orders";
+const BASE_URL = "/api/orders";
 
-// // Pobranie zarezerwowanych usług dla zalogowanego użytkownika
-// export const getReservedOrders = async (username: string) => {
-//     try {
-//         const response = await axios.get(`${API_URL}/reserved/${username}`);
-//         return response.data;
-//     } catch (error) {
-//         console.error("Błąd podczas pobierania zarezerwowanych usług:", error);
-//         return [];
-//     }
-// };
+export const orderService = {
+  getReservedOrders: async (username: string) => {
+    return await apiRequest(`${BASE_URL}/reserved/${username}`, { method: "GET" });
+  },
+
+  createOrder: async (orderData: { availableDateId: number, serviceIds: number[] }) => {
+    return await apiRequest(`${BASE_URL}/create`, {
+      method: "POST",
+      body: JSON.stringify(orderData),
+    });
+  },
+
+  getUserOrders: async () => {
+    return await apiRequest(`${BASE_URL}/user`, { method: "GET" });
+  },
+
+  deleteOrder: async (id: number) => {
+    return await apiRequest(`${BASE_URL}/${id}`, { method: "DELETE" });
+  }
+};
