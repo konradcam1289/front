@@ -14,7 +14,6 @@ import Register from "./components/auth/Register";
 import OAuth2RedirectHandler from "./components/auth/OAuth2RedirectHandler";
 import About from "./components/public/About";
 
-
 // Client Pages
 import ClientPanel from "./components/client/ClientPanel";
 import UserReservations from "./components/client/UserReservation";
@@ -34,8 +33,9 @@ import ManageServices from "./components/admin/ManageService";
 import ManageAppointments from "./components/admin/ManageAppointments";
 import AdminStats from "./components/admin/AdminStats";
 import Contact from "./components/public/Contact";
-
-
+import InactiveUsers from "./components/admin/InactiveUsers";
+import EditUser from "./components/admin/EditUser";
+import AddUser from "./components/admin/AddUser";
 
 // Toastify (popupy)
 import { ToastContainer } from "react-toastify";
@@ -55,6 +55,8 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/oauth2/success" element={<OAuth2RedirectHandler />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
 
           {/* Client Routes */}
           <Route path="/client/home" element={<ClientPanel />} />
@@ -68,24 +70,22 @@ const App: React.FC = () => {
           <Route path="/worker/status-update" element={<WorkerStatusUpdate />} />
           <Route path="/worker/manage-appointments" element={<WorkerManageAppointments />} />
 
-
-
           {/* Admin Routes */}
           <Route path="/admin/home" element={<AdminPanel />} />
-          <Route path="/admin/users" element={<ManageUsers />} />
+          <Route path="/admin/users" element={<ManageUsers />} /> {/* 👈 alias */}
+          <Route path="/admin/manage-users" element={<ManageUsers />} /> {/* 👈 główna */}
           <Route path="/admin/services" element={<ManageServices />} />
           <Route path="/admin/appointments" element={<ManageAppointments />} />
           <Route path="/admin/stats" element={<AdminStats />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/about" element={<About />} />
           <Route path="/admin/users/:userId/reservations" element={<UserReservationsPage />} />
-
+          <Route path="/admin/users/inactive" element={<InactiveUsers />} />
+          <Route path="/admin/users/:id/edit" element={<EditUser />} />
+          <Route path="/admin/add-user" element={<AddUser />} />
         </Routes>
       </main>
 
       <Footer />
 
-      {/* Global Toast Container */}
       <ToastContainer
         position="top-right"
         autoClose={3000}
