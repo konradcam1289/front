@@ -22,9 +22,13 @@ import SelectService from "./components/client/SelectService";
 import Payment from "./components/payment/Payment";
 
 // Worker Pages
+// Worker Pages
 import WorkerPanel from "./components/worker/WorkerPanel";
 import WorkerStatusUpdate from "./components/worker/WrokerStatusUpdate";
 import WorkerManageAppointments from "./components/worker/WorkerManageAppointments";
+import ManageOrders from "./components/worker/ManageOrders";
+import WorkerOrders from "./components/worker/WorkerOrders";
+import EditOrder from "./components/worker/EditOrder";
 
 // Admin Pages
 import AdminPanel from "./components/admin/AdminPanel";
@@ -69,6 +73,10 @@ const App: React.FC = () => {
           <Route path="/worker/home" element={<WorkerPanel />} />
           <Route path="/worker/status-update" element={<WorkerStatusUpdate />} />
           <Route path="/worker/manage-appointments" element={<WorkerManageAppointments />} />
+          <Route path="/worker/manage-orders" element={<ManageOrders />} />
+          <Route path="/worker/orders" element={<WorkerOrders />} />
+          <Route path="/worker/orders/edit/:id" element={<EditOrder />} />
+          
 
           {/* Admin Routes */}
           <Route path="/admin/home" element={<AdminPanel />} />
