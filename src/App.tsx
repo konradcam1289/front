@@ -23,6 +23,7 @@ import Payment from "./components/payment/Payment";
 import ClientProfile from "./components/client/ClientProfile";
 import DiagnoseIssue from "./components/client/DiagnoseIssue";
 
+
 // Worker Pages
 // Worker Pages
 import WorkerPanel from "./components/worker/WorkerPanel";
@@ -72,6 +73,7 @@ const App: React.FC = () => {
           <Route path="/payment" element={<Payment />} />
           <Route path="/client/profile" element={<ClientProfile />} />
           <Route path="/client/diagnose" element={<DiagnoseIssue />} />
+
 
 
           {/* Worker Routes */}

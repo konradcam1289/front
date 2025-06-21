@@ -1,12 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const Contact: React.FC = () => {
+    const [searchParams] = useSearchParams();
+    const subjectParam = searchParams.get("subject");
+
     const [formData, setFormData] = useState({
         name: "",
         email: "",
-        subject: "",
+        subject: subjectParam || "",
         message: ""
     });
+
+    useEffect(() => {
+        if (subjectParam) {
+            setFormData(prev => ({ ...prev, subject: subjectParam }));
+        }
+    }, [subjectParam]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -40,6 +50,15 @@ const Contact: React.FC = () => {
     return (
         <div className="max-w-5xl mx-auto mt-20 p-8 bg-white rounded-xl shadow-xl">
             <h1 className="text-3xl font-bold text-blue-700 mb-8 text-center">📞 Kontakt z warsztatem</h1>
+
+            {/* Komunikat dot. edycji rezerwacji */}
+            {subjectParam && subjectParam.toLowerCase().includes("edycja") && (
+                <div className="bg-yellow-100 border-l-4 border-yellow-600 text-yellow-800 p-4 mb-8 rounded">
+                    <strong>📅 Edycja rezerwacji:</strong><br />
+                    Zmiana terminu wizyty jest możliwa <strong>wyłącznie</strong> poprzez kontakt z warsztatem.
+                    Prosimy opisać, czego dotyczy zmiana i podać numer rezerwacji.
+                </div>
+            )}
 
             <div className="grid md:grid-cols-2 gap-10">
                 {/* Dane warsztatu */}
