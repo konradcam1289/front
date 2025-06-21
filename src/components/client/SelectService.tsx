@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 const SelectService: React.FC = () => {
     const [services, setServices] = useState<any[]>([]);
     const [cart, setCart] = useState<any[]>([]);
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,7 +19,8 @@ const SelectService: React.FC = () => {
         servicesService.getServices()
             .then(data => {
                 if (Array.isArray(data)) {
-                    setServices(data);
+                    const onlyAvailable = data.filter(service => service.available);
+                    setServices(onlyAvailable);
                 } else {
                     console.error("Nieprawidłowy format danych z API:", data);
                     setServices([]);

@@ -21,6 +21,7 @@ import NewReservation from "./components/client/NewReservation";
 import SelectService from "./components/client/SelectService";
 import Payment from "./components/payment/Payment";
 import ClientProfile from "./components/client/ClientProfile";
+import DiagnoseIssue from "./components/client/DiagnoseIssue";
 
 // Worker Pages
 // Worker Pages
@@ -70,6 +71,8 @@ const App: React.FC = () => {
           <Route path="/client/select-service" element={<SelectService />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/client/profile" element={<ClientProfile />} />
+          <Route path="/client/diagnose" element={<DiagnoseIssue />} />
+
 
           {/* Worker Routes */}
           <Route path="/worker/home" element={<WorkerPanel />} />
