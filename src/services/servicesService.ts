@@ -1,10 +1,12 @@
 import { apiRequest } from "./apiService";
 
 const servicesService = {
+    // Publiczny endpoint
     getServices: async () => {
-        return await apiRequest("/api/admin/services", { method: "GET" });
+        return await apiRequest("/api/services", { method: "GET" });
     },
 
+    // Do zarządzania przez admina (wymaga autoryzacji)
     createService: async (serviceData: { name: string; price: number; description: string; available: boolean }) => {
         return await apiRequest("/api/admin/services", {
             method: "POST",
@@ -19,7 +21,6 @@ const servicesService = {
         });
     },
 
-    // TUTAJ DODAJEMY UPDATE:
     updateService: async (id: number, serviceData: { name: string; price: number; description: string; available: boolean }) => {
         return await apiRequest(`/api/admin/services/${id}`, {
             method: "PUT",

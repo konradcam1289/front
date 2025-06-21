@@ -12,10 +12,29 @@ const Contact: React.FC = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        alert("Wiadomość została wysłana (symulacja)");
-        setFormData({ name: "", email: "", subject: "", message: "" });
+
+        try {
+            const response = await fetch("http://localhost:8080/api/contact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                alert("✅ Wiadomość została wysłana!");
+                setFormData({ name: "", email: "", subject: "", message: "" });
+            } else {
+                const errorText = await response.text();
+                alert("❌ Wystąpił błąd: " + errorText);
+            }
+        } catch (error) {
+            console.error("Błąd:", error);
+            alert("❌ Nie udało się połączyć z serwerem.");
+        }
     };
 
     return (
