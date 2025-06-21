@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { apiRequest } from "../../services/apiService";
 import { useNavigate } from "react-router-dom";
+import {
+  Users,
+  UserMinus,
+  UserPlus,
+  ClipboardList,
+  Pencil,
+} from "lucide-react";
 
 interface User {
   id: number;
@@ -8,6 +15,12 @@ interface User {
   email: string;
   primaryRole: string;
 }
+
+const roleMap: Record<string, string> = {
+  ROLE_ADMIN: "Administrator",
+  ROLE_WORKER: "Pracownik",
+  ROLE_CLIENT: "Klient",
+};
 
 const ManageUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -44,7 +57,9 @@ const ManageUsers: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-semibold text-blue-700">👥 Zarządzanie użytkownikami</h1>
+        <h1 className="text-3xl font-semibold text-blue-700 flex items-center gap-2">
+          <Users size={28} /> Zarządzanie użytkownikami
+        </h1>
         <div className="flex">
           <button
             onClick={() => setViewInactive(false)}
@@ -70,38 +85,37 @@ const ManageUsers: React.FC = () => {
               <h2 className="text-xl font-bold text-gray-800 mb-2">{user.username}</h2>
               <p className="text-gray-600 mb-1">{user.email}</p>
               <p className="text-gray-600 mb-4">
-                Rola: <span className="font-semibold text-indigo-600">{user.primaryRole}</span>
+                Rola: <span className="font-semibold text-indigo-600">{roleMap[user.primaryRole] ?? user.primaryRole}</span>
               </p>
               <div className="flex flex-col space-y-2">
                 {!viewInactive && (
                   <button
                     onClick={() => deactivateUser(user.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg shadow"
+                    className="bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg shadow flex items-center justify-center gap-2"
                   >
-                    Dezaktywuj
+                    <UserMinus size={18} /> Dezaktywuj
                   </button>
                 )}
                 {viewInactive && (
                   <button
                     onClick={() => reactivateUser(user.id)}
-                    className="bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg shadow"
+                    className="bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg shadow flex items-center justify-center gap-2"
                   >
-                    Aktywuj ponownie
+                    <UserPlus size={18} /> Aktywuj ponownie
                   </button>
                 )}
                 <button
                   onClick={() => navigate(`/admin/users/${user.id}/reservations`)}
-                  className="bg-yellow-400 hover:bg-yellow-500 text-black py-2 rounded-lg shadow"
+                  className="bg-yellow-400 hover:bg-yellow-500 text-black py-2 rounded-lg shadow flex items-center justify-center gap-2"
                 >
-                  Zobacz rezerwacje
+                  <ClipboardList size={18} /> Zobacz rezerwacje
                 </button>
                 <button
-                    onClick={() => navigate(`/admin/users/${user.id}/edit`)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg shadow"
-                    >
-                    Edytuj dane
+                  onClick={() => navigate(`/admin/users/${user.id}/edit`)}
+                  className="bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg shadow flex items-center justify-center gap-2"
+                >
+                  <Pencil size={18} /> Edytuj dane
                 </button>
-
               </div>
             </div>
           ))}

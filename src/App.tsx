@@ -38,7 +38,6 @@ import AdminPanel from "./components/admin/AdminPanel";
 import ManageUsers from "./components/admin/ManageUsers";
 import ManageServices from "./components/admin/ManageService";
 import ManageAppointments from "./components/admin/ManageAppointments";
-import AdminStats from "./components/admin/AdminStats";
 import Contact from "./components/public/Contact";
 import InactiveUsers from "./components/admin/InactiveUsers";
 import EditUser from "./components/admin/EditUser";
@@ -91,7 +90,6 @@ const App: React.FC = () => {
           <Route path="/admin/manage-users" element={<ManageUsers />} /> {/* 👈 główna */}
           <Route path="/admin/services" element={<ManageServices />} />
           <Route path="/admin/appointments" element={<ManageAppointments />} />
-          <Route path="/admin/stats" element={<AdminStats />} />
           <Route path="/admin/users/:userId/reservations" element={<UserReservationsPage />} />
           <Route path="/admin/users/inactive" element={<InactiveUsers />} />
           <Route path="/admin/users/:id/edit" element={<EditUser />} />

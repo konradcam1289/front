@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { apiRequest } from "../../services/apiService";
+import { FaEdit, FaTools, FaCalendarAlt, FaSave } from "react-icons/fa";
 
 interface WorkshopService {
   id: number;
@@ -30,17 +31,13 @@ const EditOrder: React.FC = () => {
   const [selectedDateId, setSelectedDateId] = useState<number | null>(null);
 
   useEffect(() => {
-    // Pobierz dane zamówienia
     apiRequest(`/api/worker/orders/${id}`, { method: "GET" }).then((data) => {
       setOrder(data);
       setSelectedServices(data.services.map((s: WorkshopService) => s.id));
       setSelectedDateId(data.availableDate.id);
     });
 
-    // Pobierz wszystkie usługi
     apiRequest("/api/admin/services", { method: "GET" }).then(setAllServices);
-
-    // Pobierz dostępne terminy
     apiRequest("/api/available-dates", { method: "GET" }).then(setAvailableDates);
   }, [id]);
 
@@ -74,11 +71,15 @@ const EditOrder: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded shadow mt-10">
-      <h1 className="text-2xl font-bold mb-6 text-blue-700">✏️ Edytuj zamówienie #{order.id}</h1>
+      <h1 className="text-2xl font-bold mb-6 text-blue-700 flex items-center gap-2">
+        <FaEdit /> Edytuj zamówienie #{order.id}
+      </h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="font-semibold block mb-2">🛠️ Wybierz usługi:</label>
+          <label className="font-semibold block mb-2 flex items-center gap-2">
+            <FaTools /> Wybierz usługi:
+          </label>
           {allServices.map((service) => (
             <label key={service.id} className="block text-sm mb-1">
               <input
@@ -93,16 +94,20 @@ const EditOrder: React.FC = () => {
         </div>
 
         <div>
-          <label className="font-semibold block mb-2">📅 Wybierz termin:</label>
+          <label className="font-semibold block mb-2 flex items-center gap-2">
+            <FaCalendarAlt /> Wybierz termin:
+          </label>
           <select
             className="w-full border border-gray-300 rounded p-2"
             value={selectedDateId ?? ""}
             onChange={(e) => setSelectedDateId(parseInt(e.target.value))}
           >
-            <option value="" disabled>-- Wybierz dostępny termin --</option>
+            <option value="" disabled>
+              -- Wybierz dostępny termin --
+            </option>
             {availableDates.map((date) => (
               <option key={date.id} value={date.id}>
-                {new Date(date.dateTime).toLocaleString()}
+                {new Date(date.dateTime).toLocaleString("pl-PL")}
               </option>
             ))}
           </select>
@@ -110,9 +115,9 @@ const EditOrder: React.FC = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-lg"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-lg flex items-center justify-center gap-2"
         >
-          💾 Zapisz zmiany
+          <FaSave /> Zapisz zmiany
         </button>
       </form>
     </div>

@@ -1,6 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { orderService } from "../../services/orderService";
+import { FaEdit, FaTrashAlt, FaArrowLeft } from "react-icons/fa";
+
+// Mapy tłumaczeń statusów
+const paymentStatusMap: Record<string, string> = {
+    paid: "Opłacone",
+    unpaid: "Nieopłacone"
+};
+
+const repairStatusMap: Record<string, string> = {
+    pending: "Oczekujące",
+    in_progress: "W trakcie naprawy",
+    completed: "Zakończone",
+    cancelled: "Anulowane"
+};
 
 const UserReservations: React.FC = () => {
     const [reservations, setReservations] = useState<any[]>([]);
@@ -43,25 +57,36 @@ const UserReservations: React.FC = () => {
                     {reservations.map((order) => (
                         <div key={order.id} className="p-6 bg-gray-100 rounded-lg shadow-md">
                             <h2 className="text-xl font-semibold text-blue-700 mb-4">Rezerwacja #{order.id}</h2>
-                            <p className="mb-2"><span className="font-semibold">Usługi:</span> {order.services.map((service: any) => service.name).join(", ")}</p>
-                            <p className="mb-2"><span className="font-semibold">Data wizyty:</span> {new Date(order.availableDate.dateTime).toLocaleString("pl-PL")}</p>
-                            <p className="mb-2"><span className="font-semibold">Status płatności:</span> {order.paymentStatus}</p>
-                            <p className="mb-6"><span className="font-semibold">Status naprawy:</span> {order.repairStatus}</p>
+                            <p className="mb-2">
+                                <span className="font-semibold">Usługi:</span>{" "}
+                                {order.services.map((service: any) => service.name).join(", ")}
+                            </p>
+                            <p className="mb-2">
+                                <span className="font-semibold">Data wizyty:</span>{" "}
+                                {new Date(order.availableDate.dateTime).toLocaleString("pl-PL")}
+                            </p>
+                            <p className="mb-2">
+                                <span className="font-semibold">Status płatności:</span>{" "}
+                                {paymentStatusMap[order.paymentStatus?.toLowerCase()] || order.paymentStatus}
+                            </p>
+                            <p className="mb-6">
+                                <span className="font-semibold">Status naprawy:</span>{" "}
+                                {repairStatusMap[order.repairStatus?.toLowerCase()] || order.repairStatus}
+                            </p>
 
                             <div className="flex flex-col gap-3">
                                 <button
                                     onClick={() => navigate(`/contact?subject=Edycja rezerwacji #${order.id}`)}
-                                    className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-md transition"
-                                    >
-                                    ✏️ Edytuj
+                                    className="flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-md transition"
+                                >
+                                    <FaEdit /> Edytuj
                                 </button>
-
 
                                 <button
                                     onClick={() => handleDeleteReservation(order.id)}
-                                    className="bg-red-500 hover:bg-red-600 text-white py-2 rounded-md transition"
+                                    className="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-2 rounded-md transition"
                                 >
-                                    🗑️ Usuń
+                                    <FaTrashAlt /> Usuń
                                 </button>
                             </div>
                         </div>
@@ -72,9 +97,9 @@ const UserReservations: React.FC = () => {
             <div className="flex justify-center mt-10">
                 <button
                     onClick={() => navigate("/client/home")}
-                    className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-8 rounded-lg text-lg"
+                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-3 px-8 rounded-lg text-lg"
                 >
-                    ⬅️ Powrót do panelu
+                    <FaArrowLeft /> Powrót do panelu
                 </button>
             </div>
         </div>

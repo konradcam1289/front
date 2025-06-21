@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { apiRequest } from "../../services/apiService";
 import { useNavigate } from "react-router-dom";
+import {
+  User,
+  Calendar,
+  CreditCard,
+  Wrench,
+  BadgeDollarSign,
+  Trash,
+  Pencil,
+  FileText,
+  Settings,
+} from "lucide-react";
 
 interface Order {
   id: number;
-  clientFullName: string;
-  date: string; // ✅ poprawiona właściwość
+  firstName: string;
+  lastName: string;
+  date: string;
   paymentMethod: string;
   repairStatus: string;
   paymentStatus: string;
@@ -15,6 +27,25 @@ interface Order {
     price: number;
   }[];
 }
+
+const paymentStatusMap: Record<string, string> = {
+  paid: "Opłacone",
+  unpaid: "Nieopłacone",
+};
+
+const repairStatusMap: Record<string, string> = {
+  pending: "Oczekujące",
+  in_progress: "W trakcie naprawy",
+  completed: "Zakończone",
+  cancelled: "Anulowane",
+};
+
+const paymentMethodMap: Record<string, string> = {
+  card: "Karta",
+  cash: "Gotówka",
+  blik: "BLIK",
+  online: "Online",
+};
 
 const WorkerOrders: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -55,8 +86,8 @@ const WorkerOrders: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <h1 className="text-3xl font-bold text-blue-700 mb-8">
-        Lista zamówień do obsługi
+      <h1 className="text-3xl font-bold text-blue-700 mb-8 flex items-center gap-2">
+        <FileText size={28} /> Lista zamówień do obsługi
       </h1>
 
       {orders.length === 0 ? (
@@ -69,50 +100,50 @@ const WorkerOrders: React.FC = () => {
               className="bg-white p-6 rounded-lg shadow-md border border-gray-200"
             >
               <div className="flex justify-between items-start flex-wrap gap-4">
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                    Zamówienie #{order.id}
+                <div className="space-y-1">
+                  <h2 className="text-xl font-semibold text-gray-800 mb-2 flex items-center gap-2">
+                    <FileText size={20} /> Zamówienie #{order.id}
                   </h2>
-                  <p className="text-gray-700">
-                    <span className="font-medium">Klient:</span>{" "}
-                    {order.clientFullName}
+                  <p className="text-gray-700 flex items-center gap-2">
+                    <User size={16} /> {order.firstName} {order.lastName}
                   </p>
-                  <p className="text-gray-700">
-                    <span className="font-medium">Termin:</span>{" "}
-                    {formatDate(order.date)}
+                  <p className="text-gray-700 flex items-center gap-2">
+                    <Calendar size={16} /> {formatDate(order.date)}
                   </p>
-                  <p className="text-gray-700">
-                    <span className="font-medium">Metoda płatności:</span>{" "}
-                    {order.paymentMethod}
+                  <p className="text-gray-700 flex items-center gap-2">
+                    <CreditCard size={16} />{" "}
+                    {paymentMethodMap[order.paymentMethod?.toLowerCase()] || order.paymentMethod}
                   </p>
-                  <p className="text-gray-700">
-                    <span className="font-medium">Status naprawy:</span>{" "}
-                    {order.repairStatus}
+                  <p className="text-gray-700 flex items-center gap-2">
+                    <Wrench size={16} />{" "}
+                    {repairStatusMap[order.repairStatus?.toLowerCase()] || order.repairStatus}
                   </p>
-                  <p className="text-gray-700">
-                    <span className="font-medium">Status płatności:</span>{" "}
-                    {order.paymentStatus}
+                  <p className="text-gray-700 flex items-center gap-2">
+                    <BadgeDollarSign size={16} />{" "}
+                    {paymentStatusMap[order.paymentStatus?.toLowerCase()] || order.paymentStatus}
                   </p>
                 </div>
 
                 <div className="flex gap-2 mt-2 md:mt-0">
                   <button
                     onClick={() => handleEdit(order.id)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                    className="flex items-center bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded shadow"
                   >
-                    Edytuj
+                    <Pencil size={16} /> <span className="ml-2">Edytuj</span>
                   </button>
                   <button
                     onClick={() => handleDelete(order.id)}
-                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+                    className="flex items-center bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow"
                   >
-                    Usuń
+                    <Trash size={16} /> <span className="ml-2">Usuń</span>
                   </button>
                 </div>
               </div>
 
               <div className="mt-4">
-                <h3 className="font-medium mb-2 text-gray-800">Usługi:</h3>
+                <h3 className="font-medium mb-2 text-gray-800 flex items-center gap-2">
+                  <Settings size={18} /> Usługi:
+                </h3>
                 <ul className="list-disc list-inside text-gray-700 space-y-1">
                   {order.services.map((service) => (
                     <li key={service.id}>

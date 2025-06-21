@@ -1,9 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { apiRequest } from "../../services/apiService";
+import {
+  UserCog,
+  Save,
+  Mail,
+  Phone,
+  MapPin,
+  BadgeCheck,
+} from "lucide-react";
 
-const roles = ["CLIENT", "WORKER", "ADMIN"];
+// Mapy ról do polskich nazw
+const rolesMap: Record<string, string> = {
+  CLIENT: "Klient",
+  WORKER: "Pracownik",
+  ADMIN: "Administrator",
+};
 
+const availableRoles = Object.keys(rolesMap);
 
 interface UserForm {
   username: string;
@@ -46,9 +60,7 @@ const EditUser: React.FC = () => {
       .catch((err) => console.error("❌ Błąd ładowania użytkownika:", err));
   }, [id]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
@@ -66,13 +78,11 @@ const EditUser: React.FC = () => {
     e.preventDefault();
     apiRequest(`/api/admin/users/${id}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     })
       .then(() => {
-        alert("✅ Użytkownik zaktualizowany");
+        alert("✅ Użytkownik został zaktualizowany");
         navigate("/admin/manage-users");
       })
       .catch((err) => console.error("❌ Błąd zapisu:", err));
@@ -82,9 +92,11 @@ const EditUser: React.FC = () => {
 
   return (
     <div className="max-w-xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6 text-blue-700 flex items-center gap-2">
-        ✏️ Edytuj użytkownika
+      <h1 className="text-3xl font-bold mb-6 text-blue-700 flex items-center gap-2">
+        <UserCog className="w-7 h-7" />
+        Edytuj użytkownika
       </h1>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block font-semibold mb-1">Nazwa użytkownika</label>
@@ -95,8 +107,11 @@ const EditUser: React.FC = () => {
             className="w-full border border-gray-300 rounded p-2"
           />
         </div>
+
         <div>
-          <label className="block font-semibold mb-1">Email</label>
+          <label className="block font-semibold mb-1 flex items-center gap-2">
+            <Mail size={16} /> Email
+          </label>
           <input
             name="email"
             value={form.email}
@@ -104,6 +119,7 @@ const EditUser: React.FC = () => {
             className="w-full border border-gray-300 rounded p-2"
           />
         </div>
+
         <div>
           <label className="block font-semibold mb-1">Imię</label>
           <input
@@ -113,6 +129,7 @@ const EditUser: React.FC = () => {
             className="w-full border border-gray-300 rounded p-2"
           />
         </div>
+
         <div>
           <label className="block font-semibold mb-1">Nazwisko</label>
           <input
@@ -122,8 +139,11 @@ const EditUser: React.FC = () => {
             className="w-full border border-gray-300 rounded p-2"
           />
         </div>
+
         <div>
-          <label className="block font-semibold mb-1">Telefon</label>
+          <label className="block font-semibold mb-1 flex items-center gap-2">
+            <Phone size={16} /> Telefon
+          </label>
           <input
             name="phoneNumber"
             value={form.phoneNumber}
@@ -131,8 +151,11 @@ const EditUser: React.FC = () => {
             className="w-full border border-gray-300 rounded p-2"
           />
         </div>
+
         <div>
-          <label className="block font-semibold mb-1">Adres</label>
+          <label className="block font-semibold mb-1 flex items-center gap-2">
+            <MapPin size={16} /> Adres
+          </label>
           <input
             name="address"
             value={form.address}
@@ -142,25 +165,27 @@ const EditUser: React.FC = () => {
         </div>
 
         <div>
-          <p className="mb-2 font-semibold">Role:</p>
-          {roles.map((role) => (
-            <label key={role} className="block text-sm">
+          <p className="mb-2 font-semibold flex items-center gap-2">
+            <BadgeCheck size={16} /> Role użytkownika:
+          </p>
+          {availableRoles.map((role) => (
+            <label key={role} className="block text-sm ml-2">
               <input
                 type="checkbox"
                 checked={form.roles.includes(role)}
                 onChange={() => handleRoleToggle(role)}
                 className="mr-2"
               />
-              {role}
+              {rolesMap[role]}
             </label>
           ))}
         </div>
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded flex items-center justify-center gap-2"
         >
-          Zapisz zmiany
+          <Save size={18} /> Zapisz zmiany
         </button>
       </form>
     </div>

@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import {
+    FaPhoneAlt,
+    FaEnvelope,
+    FaMapMarkerAlt,
+    FaClock,
+    FaTools,
+    FaCalendarAlt
+} from "react-icons/fa";
 
 const Contact: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -49,14 +57,19 @@ const Contact: React.FC = () => {
 
     return (
         <div className="max-w-5xl mx-auto mt-20 p-8 bg-white rounded-xl shadow-xl">
-            <h1 className="text-3xl font-bold text-blue-700 mb-8 text-center">📞 Kontakt z warsztatem</h1>
+            <h1 className="text-3xl font-bold text-blue-700 mb-8 text-center flex items-center justify-center gap-2">
+                <FaTools /> Kontakt z warsztatem
+            </h1>
 
             {/* Komunikat dot. edycji rezerwacji */}
             {subjectParam && subjectParam.toLowerCase().includes("edycja") && (
-                <div className="bg-yellow-100 border-l-4 border-yellow-600 text-yellow-800 p-4 mb-8 rounded">
-                    <strong>📅 Edycja rezerwacji:</strong><br />
-                    Zmiana terminu wizyty jest możliwa <strong>wyłącznie</strong> poprzez kontakt z warsztatem.
-                    Prosimy opisać, czego dotyczy zmiana i podać numer rezerwacji.
+                <div className="bg-yellow-100 border-l-4 border-yellow-600 text-yellow-800 p-4 mb-8 rounded flex items-start gap-2">
+                    <FaCalendarAlt className="text-yellow-600 mt-1" />
+                    <div>
+                        <strong>Edycja rezerwacji:</strong><br />
+                        Zmiana terminu wizyty jest możliwa <strong>wyłącznie</strong> poprzez kontakt z warsztatem.
+                        Prosimy opisać, czego dotyczy zmiana i podać numer rezerwacji.
+                    </div>
                 </div>
             )}
 
@@ -64,21 +77,29 @@ const Contact: React.FC = () => {
                 {/* Dane warsztatu */}
                 <div className="space-y-5">
                     <div>
-                        <h2 className="text-xl font-semibold mb-2">Adres warsztatu:</h2>
+                        <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
+                            <FaMapMarkerAlt /> Adres warsztatu:
+                        </h2>
                         <p>AutoWorkshop Sp. z o.o.</p>
                         <p>ul. Mechaników 123</p>
                         <p>00-123 Warszawa</p>
                     </div>
                     <div>
-                        <h2 className="text-xl font-semibold mb-2">Telefon:</h2>
-                        <p>📞 +48 123 456 789</p>
+                        <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
+                            <FaPhoneAlt /> Telefon:
+                        </h2>
+                        <p>+48 123 456 789</p>
                     </div>
                     <div>
-                        <h2 className="text-xl font-semibold mb-2">Email:</h2>
-                        <p>📧 kontakt@autoworkshop.pl</p>
+                        <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
+                            <FaEnvelope /> Email:
+                        </h2>
+                        <p>carworkshop1289@gmail.com</p>
                     </div>
                     <div>
-                        <h2 className="text-xl font-semibold mb-2">Godziny otwarcia:</h2>
+                        <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
+                            <FaClock /> Godziny otwarcia:
+                        </h2>
                         <p>Poniedziałek - Piątek: 8:00 - 18:00</p>
                         <p>Sobota: 9:00 - 14:00</p>
                         <p>Niedziela: nieczynne</p>

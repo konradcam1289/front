@@ -1,6 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { apiRequest } from "../../services/apiService";
 import { useNavigate } from "react-router-dom";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
+
+// Mapy tłumaczeń
+const repairStatusMap: Record<string, string> = {
+  pending: "Oczekujące",
+  in_progress: "W trakcie naprawy",
+  completed: "Zakończone",
+  cancelled: "Anulowane"
+};
+
+const paymentStatusMap: Record<string, string> = {
+  paid: "Opłacone",
+  unpaid: "Nieopłacone"
+};
+
+const paymentMethodMap: Record<string, string> = {
+  card: "Karta",
+  cash: "Gotówka",
+  blik: "BLIK",
+  online: "Online"
+};
 
 const ManageOrders: React.FC = () => {
   const [orders, setOrders] = useState<any[]>([]);
@@ -54,22 +75,28 @@ const ManageOrders: React.FC = () => {
                 <td className="p-2 whitespace-pre-line">
                   {order.services.map((s: any) => s.name).join(", ")}
                 </td>
-                <td className="p-2">{order.paymentMethod}</td>
-                <td className="p-2">{order.repairStatus}</td>
-                <td className="p-2">{order.paymentStatus}</td>
+                <td className="p-2">
+                  {paymentMethodMap[order.paymentMethod?.toLowerCase()] || order.paymentMethod}
+                </td>
+                <td className="p-2">
+                  {repairStatusMap[order.repairStatus?.toLowerCase()] || order.repairStatus}
+                </td>
+                <td className="p-2">
+                  {paymentStatusMap[order.paymentStatus?.toLowerCase()] || order.paymentStatus}
+                </td>
                 <td className="p-2">
                   <div className="flex flex-col md:flex-row gap-2">
                     <button
                       className="flex items-center justify-center bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm"
                       onClick={() => navigate(`/worker/orders/edit/${order.id}`)}
                     >
-                      ✏️ <span className="ml-1">Edytuj</span>
+                      <FaEdit className="mr-1" /> Edytuj
                     </button>
                     <button
                       className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm"
                       onClick={() => deleteOrder(order.id)}
                     >
-                      🗑️ <span className="ml-1">Usuń</span>
+                      <FaTrashAlt className="mr-1" /> Usuń
                     </button>
                   </div>
                 </td>
