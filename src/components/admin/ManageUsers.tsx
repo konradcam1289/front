@@ -5,7 +5,6 @@ import {
   Users,
   UserMinus,
   UserPlus,
-  ClipboardList,
   Pencil,
 } from "lucide-react";
 
@@ -104,12 +103,6 @@ const ManageUsers: React.FC = () => {
                     <UserPlus size={18} /> Aktywuj ponownie
                   </button>
                 )}
-                <button
-                  onClick={() => navigate(`/admin/users/${user.id}/reservations`)}
-                  className="bg-yellow-400 hover:bg-yellow-500 text-black py-2 rounded-lg shadow flex items-center justify-center gap-2"
-                >
-                  <ClipboardList size={18} /> Zobacz rezerwacje
-                </button>
                 <button
                   onClick={() => navigate(`/admin/users/${user.id}/edit`)}
                   className="bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg shadow flex items-center justify-center gap-2"

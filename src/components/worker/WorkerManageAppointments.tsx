@@ -106,12 +106,12 @@ const WorkerManageAppointments: React.FC = () => {
         </h2>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+          <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md text-center">
             <thead>
               <tr className="bg-blue-100 text-gray-700">
-                <th className="py-3 px-6 border-b">Data i godzina</th>
-                <th className="py-3 px-6 border-b">Status</th>
-                <th className="py-3 px-6 border-b">Akcje</th>
+                <th className="py-3 px-6 border-b text-center">Data i godzina</th>
+                <th className="py-3 px-6 border-b text-center">Status</th>
+                <th className="py-3 px-6 border-b text-center">Akcje</th>
               </tr>
             </thead>
             <tbody>
@@ -123,7 +123,7 @@ const WorkerManageAppointments: React.FC = () => {
                 </tr>
               ) : (
                 dates.map((date) => (
-                  <tr key={date.id} className="text-center hover:bg-gray-50">
+                  <tr key={date.id} className="hover:bg-gray-50 text-center">
                     <td className="py-4 px-6 border-b">
                       {new Date(date.dateTime).toLocaleString("pl-PL")}
                     </td>
@@ -134,10 +134,10 @@ const WorkerManageAppointments: React.FC = () => {
                         <span className="text-green-600 font-semibold">Wolny</span>
                       )}
                     </td>
-                    <td className="py-4 px-6 border-b">
+                    <td className="py-4 px-6 border-b text-center">
                       <button
                         onClick={() => handleDeleteDate(date.id)}
-                        className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md shadow transition flex items-center gap-2"
+                        className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md shadow transition flex items-center justify-center gap-2 mx-auto"
                       >
                         <Trash2 size={18} /> Usuń
                       </button>

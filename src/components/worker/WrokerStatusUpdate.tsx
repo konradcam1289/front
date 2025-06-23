@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { orderService } from "../../services/orderService";
 import { toast } from "react-toastify";
+import { HiOutlineRefresh } from "react-icons/hi"; // ✅ Ikona aktualizacji
 
 interface Order {
   orderId: number;
@@ -68,8 +69,9 @@ const WorkerStatusUpdate: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto mt-20 p-8 bg-white rounded-lg shadow-lg">
-      <h1 className="text-3xl font-bold text-blue-700 mb-10 text-center">
-        🔄 Aktualizacja Statusów
+      <h1 className="text-3xl font-bold text-blue-700 mb-10 text-center flex items-center justify-center gap-2">
+        <HiOutlineRefresh className="text-4xl" />
+        Aktualizacja Statusów
       </h1>
 
       {orders.length === 0 ? (

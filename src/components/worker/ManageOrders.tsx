@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { apiRequest } from "../../services/apiService";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import { HiOutlineClipboardList } from "react-icons/hi"; // ✅ Dodana profesjonalna ikona
 
 // Mapy tłumaczeń
 const repairStatusMap: Record<string, string> = {
@@ -45,7 +46,10 @@ const ManageOrders: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto mt-10 p-6 bg-white rounded-lg shadow">
-      <h2 className="text-2xl font-bold mb-6 text-blue-700">📋 Zamówienia do obsługi</h2>
+      <h2 className="text-2xl font-bold mb-6 text-blue-700 flex items-center gap-2">
+        <HiOutlineClipboardList className="text-3xl text-blue-700" />
+        Zamówienia do obsługi
+      </h2>
 
       <div className="overflow-x-auto">
         <table className="w-full table-auto border text-sm">
